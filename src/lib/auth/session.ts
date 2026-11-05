@@ -76,12 +76,18 @@ export async function destroyCurrentSession(): Promise<void> {
   const token = jar.get(SESSION_COOKIE)?.value;
   if (token) {
     // Revoke server-side too, so the row cannot be replayed if the cookie was
-    // copied before logout.
+    // copied before logout. A DB failure here means the session row stays
+    // active until it expires naturally; we log rather than silently ignore.
     await db
       .update(sessions)
       .set({ revokedAt: new Date() })
       .where(and(eq(sessions.tokenHash, hashToken(token)), isNull(sessions.revokedAt)))
-      .catch(() => undefined);
+      .catch((error) => {
+        console.error("session-revocation-failed", {
+          code: error instanceof Error ? error.name : "unknown",
+          message: error instanceof Error ? error.message : String(error),
+        });
+      });
   }
   jar.delete(SESSION_COOKIE);
 }
@@ -106,8 +112,7 @@ export async function getCurrentUser(): Promise<User | null> {
     .limit(1);
 
   if (rows.length === 0) {
-    // Expired or revoked: clear the stale cookie so the UI shows signed-out.
-    jar.delete(SESSION_COOKIE);
+    // Expired or revoked: return null. Cookie deletion is handled by the logout route handler.
     return null;
   }
   return rows[0].user;

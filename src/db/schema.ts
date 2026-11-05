@@ -102,10 +102,7 @@ export const scanReports = pgTable(
     finishedAt: timestamp("finished_at", { withTimezone: true }),
   },
   (table) => [
-    // History is always "my scans, newest first" — this index serves it.
     index("scan_reports_user_started_idx").on(table.userId, table.startedAt),
-    // Rate limiting counts scans per user inside a time window.
-    index("scan_reports_user_window_idx").on(table.userId, table.startedAt),
   ],
 );
 

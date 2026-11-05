@@ -1,0 +1,1 @@
+DROP INDEX "scan_reports_user_window_idx";

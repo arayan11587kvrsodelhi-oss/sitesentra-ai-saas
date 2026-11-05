@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/*
+ * SiteSentra design tokens.
+ * Direction: graphite / dark-neutral surfaces, one restrained cyan accent,
+ * high-contrast text, generous spacing. No animation-first decisions.
+ */
+@theme {
+  --color-ink-950: #06090c;
+  --color-ink-900: #0a0f14;
+  --color-ink-850: #0e141a;
+  --color-ink-800: #121a21;
+  --color-ink-750: #17212a;
+  --color-ink-700: #1d2932;
+  --color-ink-600: #2a3944;
+  --color-mist-500: #7d8d9a;
+  --color-mist-400: #93a3b0;
+  --color-mist-300: #b6c3cd;
+  --color-mist-200: #d6dee4;
+  --color-mist-100: #eef2f5;
+
+  --color-signal-300: #7dd3fc;
+  --color-signal-400: #22d3ee;
+  --color-signal-500: #06b6d4;
+  --color-signal-600: #0891b2;
+
+  --color-ok-400: #34d399;
+  --color-warn-400: #fbbf24;
+  --color-bad-400: #f87171;
+  --color-crit-400: #fb7185;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-mist-200);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible focus for keyboard users, everywhere, including on dark surfaces. */
+  :focus-visible {
+    outline: 2px solid var(--color-signal-400);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-signal-400) 35%, transparent);
+    color: var(--color-mist-100);
+  }
+
+  /* Respect users who ask for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility surface {
+  background-color: var(--color-ink-900);
+  border: 1px solid var(--color-ink-700);
+}
+
+@utility grid-backdrop {
+  background-image:
+    radial-gradient(
+      900px 400px at 15% -10%,
+      color-mix(in oklab, var(--color-signal-500) 14%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(to bottom, var(--color-ink-900), var(--color-ink-950));
+}

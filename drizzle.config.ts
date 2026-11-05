@@ -3,10 +3,12 @@ import { defineConfig } from "drizzle-kit";
 
 config({ path: ".env.local" });
 
-const url =
-  process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
+const url = process.env.DATABASE_URL_UNPOOLED;
 if (!url) {
-  throw new Error("DATABASE_URL is missing from .env.local");
+  throw new Error(
+    "DATABASE_URL_UNPOOLED is missing from .env.local. " +
+    "Migrations require a non-pooled connection to avoid pool contamination."
+  );
 }
 
 export default defineConfig({

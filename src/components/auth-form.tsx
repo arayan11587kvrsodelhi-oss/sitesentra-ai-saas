@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useId, useState, type FormEvent } from "react";
+import { useId, useState, type SyntheticEvent } from "react";
+
+import { IconAlert, IconEye, IconEyeOff } from "@/components/icons";
+import { Field } from "@/components/ui";
 
 type Mode = "login" | "signup";
 
@@ -19,6 +22,9 @@ const MIN_PASSWORD = 10;
 /**
  * Client-side validation exists for feedback only. The API re-validates
  * everything and is the authoritative check.
+ *
+ * The request contract is unchanged: POST /api/auth/{login|signup} with
+ * { email, password, next }, then navigate to the server-provided `next`.
  */
 export function AuthForm({ mode, next = "/dashboard" }: Props) {
   const router = useRouter();
@@ -30,10 +36,11 @@ export function AuthForm({ mode, next = "/dashboard" }: Props) {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [reveal, setReveal] = useState(false);
 
   const isSignup = mode === "signup";
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
 
@@ -80,16 +87,14 @@ export function AuthForm({ mode, next = "/dashboard" }: Props) {
         <div
           id={errorId}
           role="alert"
-          className="rounded-md border border-bad-400/40 bg-bad-400/10 px-4 py-3 text-sm text-bad-400"
+          className="flex items-start gap-2 rounded-[14px] border border-critical/35 bg-critical/[0.12] px-3.5 py-3 text-[12.5px] leading-5 text-white backdrop-blur-md"
         >
-          {errors.form}
+          <IconAlert size={15} className="mt-0.5 shrink-0 text-critical" />
+          <span>{errors.form}</span>
         </div>
       ) : null}
 
-      <div className="space-y-2">
-        <label htmlFor={emailId} className="block text-sm font-medium text-mist-200">
-          Email address
-        </label>
+      <Field label="Email address" htmlFor={emailId} error={errors.email}>
         <input
           id={emailId}
           name="email"
@@ -101,67 +106,81 @@ export function AuthForm({ mode, next = "/dashboard" }: Props) {
           onChange={(event) => setEmail(event.target.value)}
           aria-invalid={errors.email ? true : undefined}
           aria-describedby={errors.email ? `${emailId}-error` : undefined}
-          className="w-full rounded-md border border-ink-600 bg-ink-950 px-3.5 py-2.5 text-mist-100 placeholder:text-mist-500 focus:border-signal-400"
+          className="glass-input"
           placeholder="you@example.com"
         />
-        {errors.email ? (
-          <p id={`${emailId}-error`} className="text-sm text-bad-400">
-            {errors.email}
-          </p>
-        ) : null}
-      </div>
+      </Field>
 
-      <div className="space-y-2">
-        <label htmlFor={passwordId} className="block text-sm font-medium text-mist-200">
-          Password
-        </label>
-        <input
-          id={passwordId}
-          name="password"
-          type="password"
-          autoComplete={isSignup ? "new-password" : "current-password"}
-          required
-          minLength={isSignup ? MIN_PASSWORD : undefined}
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          aria-invalid={errors.password ? true : undefined}
-          aria-describedby={errors.password ? `${passwordId}-error` : `${passwordId}-hint`}
-          className="w-full rounded-md border border-ink-600 bg-ink-950 px-3.5 py-2.5 text-mist-100 placeholder:text-mist-500 focus:border-signal-400"
-          placeholder={isSignup ? "At least 10 characters" : "Your password"}
-        />
-        {errors.password ? (
-          <p id={`${passwordId}-error`} className="text-sm text-bad-400">
-            {errors.password}
-          </p>
-        ) : (
-          <p id={`${passwordId}-hint`} className="text-sm text-mist-500">
-            {isSignup
+      <Field
+        label="Password"
+        htmlFor={passwordId}
+        error={errors.password}
+        hint={
+          errors.password
+            ? undefined
+            : isSignup
               ? "Minimum 10 characters. Stored only as an scrypt hash — we cannot read it back."
-              : "Forgot your password? This MVP has no reset flow yet; create a new account with a different email."}
-          </p>
-        )}
-      </div>
-
-      <button
-        type="submit"
-        disabled={submitting}
-        className="w-full rounded-md bg-signal-500 px-4 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-signal-400 disabled:cursor-not-allowed disabled:opacity-60"
+              : "This build has no password reset flow yet; create a new account if you have lost access."
+        }
       >
-        {submitting ? "Please wait…" : isSignup ? "Create account" : "Sign in"}
+        <div className="relative">
+          <input
+            id={passwordId}
+            name="password"
+            type={reveal ? "text" : "password"}
+            autoComplete={isSignup ? "new-password" : "current-password"}
+            required
+            minLength={isSignup ? MIN_PASSWORD : undefined}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            aria-invalid={errors.password ? true : undefined}
+            aria-describedby={errors.password ? `${passwordId}-error` : `${passwordId}-hint`}
+            className="glass-input pr-11"
+            placeholder={isSignup ? "At least 10 characters" : "Your password"}
+          />
+          <button
+            type="button"
+            onClick={() => setReveal((value) => !value)}
+            aria-label={reveal ? "Hide password" : "Show password"}
+            aria-pressed={reveal}
+            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-[14px] text-white/35 transition-colors hover:text-mint"
+          >
+            {reveal ? <IconEyeOff size={15} /> : <IconEye size={15} />}
+          </button>
+        </div>
+      </Field>
+
+      <button type="submit" disabled={submitting} className="glass-cta">
+        {submitting ? (
+          <>
+            <span className="spinner" aria-hidden="true" />
+            {isSignup ? "Creating account…" : "Signing in…"}
+          </>
+        ) : isSignup ? (
+          "Create account"
+        ) : (
+          "Sign in"
+        )}
       </button>
 
-      <p className="text-sm text-mist-400">
+      <p className="text-center text-[12.5px] leading-5 text-white/45">
         {isSignup ? (
           <>
             Already have an account?{" "}
-            <Link href={`/login?next=${encodeURIComponent(next)}`} className="text-signal-300 underline">
+            <Link
+              href={`/login?next=${encodeURIComponent(next)}`}
+              className="font-medium text-mint underline decoration-mint/30 underline-offset-4 transition-colors hover:decoration-mint"
+            >
               Sign in
             </Link>
           </>
         ) : (
           <>
             New to SiteSentra?{" "}
-            <Link href={`/signup?next=${encodeURIComponent(next)}`} className="text-signal-300 underline">
+            <Link
+              href={`/signup?next=${encodeURIComponent(next)}`}
+              className="font-medium text-mint underline decoration-mint/30 underline-offset-4 transition-colors hover:decoration-mint"
+            >
               Create an account
             </Link>
           </>

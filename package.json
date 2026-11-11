@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:integration": "node --experimental-strip-types tests/runner.ts",
+    "test:integration:provision": "node tests/provision-integration.mjs"
   },
   "dependencies": {
     "@neon/config": "^1.11.2",

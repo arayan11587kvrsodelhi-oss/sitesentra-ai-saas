@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { IconTrash } from "@/components/icons";
+
 /** Deletes one of the signed-in user's own reports. Server enforces ownership. */
 export function DeleteScanButton({ reportId }: { reportId: string }) {
   const router = useRouter();
@@ -21,7 +23,7 @@ export function DeleteScanButton({ reportId }: { reportId: string }) {
         setState("error");
         return;
       }
-      router.push("/dashboard");
+      router.push("/dashboard/history");
       router.refresh();
     } catch {
       setState("error");
@@ -29,19 +31,20 @@ export function DeleteScanButton({ reportId }: { reportId: string }) {
   }
 
   return (
-    <span className="flex items-center gap-3">
+    <span className="flex items-center gap-2">
       {state === "error" ? (
-        <span role="alert" className="text-xs text-bad-400">
-          Could not delete this report.
+        <span role="alert" className="text-[11.5px] text-critical">
+          Could not delete
         </span>
       ) : null}
       <button
         type="button"
         onClick={onDelete}
         disabled={state === "working"}
-        className="rounded-md border border-ink-600 px-3 py-1.5 text-sm text-mist-400 transition-colors hover:border-bad-400/50 hover:bg-bad-400/10 hover:text-bad-400 disabled:opacity-60"
+        className="btn btn-danger btn-sm gap-1.5"
       >
-        {state === "working" ? "Deleting…" : "Delete report"}
+        <IconTrash size={14} />
+        {state === "working" ? "Deleting…" : "Delete"}
       </button>
     </span>
   );

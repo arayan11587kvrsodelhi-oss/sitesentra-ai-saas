@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getCurrentUser } from "@/lib/auth/session";
-import { SiteFooter, SiteHeader } from "@/components/site-header";
+import { PublicFooter, PublicHeader } from "@/components/site-chrome";
+import { IconExternal } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Methodology & limitations" };
 
 const SECTIONS = [
   {
+    id: "what-a-scan-does",
     heading: "What a scan does",
     items: [
       "Validates the submitted URL against the SSRF and abuse policy before opening any socket.",
@@ -20,6 +22,7 @@ const SECTIONS = [
     ],
   },
   {
+    id: "ssrf",
     heading: "SSRF and abuse controls",
     items: [
       "Allowed schemes: http and https only. file:, gopher:, dict:, data:, ftp: and similar are rejected.",
@@ -37,6 +40,7 @@ const SECTIONS = [
     ],
   },
   {
+    id: "authorization",
     heading: "Authorization model",
     items: [
       "Identity always comes from the HttpOnly session cookie resolved against the sessions table on the server.",
@@ -46,6 +50,7 @@ const SECTIONS = [
     ],
   },
   {
+    id: "limitations",
     heading: "Known limitations — read this before trusting a report",
     items: [
       "One unauthenticated GET per origin. Anything behind a login, a WAF challenge, a bot block or geo-restriction is invisible to the scan.",
@@ -59,59 +64,106 @@ const SECTIONS = [
   },
 ];
 
+const CONTENTS = [
+  { href: "#what-a-scan-does", label: "What a scan does" },
+  { href: "#ssrf", label: "SSRF and abuse controls" },
+  { href: "#authorization", label: "Authorization model" },
+  { href: "#limitations", label: "Known limitations" },
+  { href: "#acceptable-use", label: "Acceptable use" },
+];
+
 export default async function MethodologyPage() {
   const user = await getCurrentUser();
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <SiteHeader user={user ? { email: user.email } : null} />
-      <main id="main" className="flex-1 border-b border-ink-700/70">
-        <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-signal-400">Methodology</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-mist-100 sm:text-4xl">
-            Exactly what SiteSentra checks — and what it cannot tell you
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist-300">
-            This page exists so a report is never over-interpreted. Every statement in a SiteSentra report traces back
-            to a value observed during the scan described below.
-          </p>
+    <div className="flex min-h-screen flex-col bg-base">
+      <PublicHeader signedIn={Boolean(user)} />
 
-          <div className="mt-10 space-y-10">
-            {SECTIONS.map((section) => (
-              <section key={section.heading}>
-                <h2 className="text-xl font-semibold tracking-tight text-mist-100">{section.heading}</h2>
-                <ul className="mt-4 space-y-2.5">
+      <main id="main" className="flex-1">
+        <div className="relative overflow-hidden border-b border-line">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(60% 70% at 10% 0%, rgb(9 136 118 / 0.18) 0%, transparent 65%)",
+            }}
+          />
+          <div className="page relative py-10 sm:py-14">
+            <span className="kicker">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-mint" />
+              Methodology
+            </span>
+            <h1 className="h1 mt-5 max-w-3xl text-balance">
+              Exactly what SiteSentra checks — and what it cannot tell you
+            </h1>
+            <p className="lede mt-4 max-w-2xl">
+              This page exists so a report is never over-interpreted. Every statement in a SiteSentra report traces back
+              to a value observed during the scan described below.
+            </p>
+          </div>
+        </div>
+
+        <div className="page grid gap-10 py-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-14 lg:py-14">
+          {/* Contents */}
+          <nav aria-label="On this page" className="lg:sticky lg:top-24 lg:self-start">
+            <p className="eyebrow mb-3 text-faint">Contents</p>
+            <ol className="space-y-1.5 border-l border-line">
+              {CONTENTS.map((item, index) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className="mono -ml-px flex gap-2 border-l border-transparent py-0.5 pl-3 text-[11.5px] text-muted transition-colors hover:border-mint hover:text-fg"
+                  >
+                    <span className="text-faint">{String(index + 1).padStart(2, "0")}</span>
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          <div className="min-w-0 space-y-12">
+            {SECTIONS.map((section, sIndex) => (
+              <section key={section.id} id={section.id} className="scroll-mt-24">
+                <div className="flex items-baseline gap-3 border-b border-line pb-3">
+                  <span className="mono text-[11px] text-faint">{String(sIndex + 1).padStart(2, "0")}</span>
+                  <h2 className="h2 text-[1.125rem]">{section.heading}</h2>
+                </div>
+                <ul className="mt-4 divide-y divide-line/70">
                   {section.items.map((item) => (
-                    <li key={item} className="flex gap-3 text-sm leading-relaxed text-mist-400">
-                      <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-signal-500" />
-                      <span className="break-words font-mono text-[0.82rem] sm:text-sm">{item}</span>
+                    <li key={item} className="flex gap-3 py-2.5 text-[12.5px] leading-6 text-soft">
+                      <span aria-hidden="true" className="mono mt-2.5 size-1 shrink-0 rounded-[1px] bg-line-strong" />
+                      <span className="mono leading-6">{item}</span>
                     </li>
                   ))}
                 </ul>
               </section>
             ))}
-          </div>
 
-          <div className="mt-12 rounded-lg border border-ink-700 bg-ink-900 p-6">
-            <h2 className="text-lg font-semibold text-mist-100">Acceptable use</h2>
-            <p className="mt-3 text-sm leading-relaxed text-mist-400">
-              Only submit websites you own or have explicit permission to test. SiteSentra performs a passive
-              configuration read — a single unauthenticated GET — and is not an authorisation to test third-party
-              systems. Abuse, high-volume scanning or attempts to reach internal infrastructure will result in account
-              suspension.
-            </p>
-            <div className="mt-5">
-              <Link
-                href={user ? "/dashboard" : "/signup"}
-                className="inline-block rounded-md bg-signal-500 px-4 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-signal-400"
-              >
-                {user ? "Go to dashboard" : "Create an account"}
-              </Link>
-            </div>
+            <section id="acceptable-use" className="scroll-mt-24 rounded-sm border border-line bg-panel p-5 sm:p-6">
+              <h2 className="h2 text-[1.125rem]">Acceptable use</h2>
+              <p className="mt-3 max-w-2xl text-[13px] leading-6 text-muted">
+                Only submit websites you own or have explicit permission to test. SiteSentra performs a passive
+                configuration read — a single unauthenticated GET — and is not an authorisation to test third-party
+                systems. Abuse, high-volume scanning or attempts to reach internal infrastructure will result in account
+                suspension.
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-2">
+                <Link href={user ? "/dashboard" : "/signup"} className="btn btn-primary">
+                  {user ? "Open the dashboard" : "Create an account"}
+                </Link>
+                <Link href="/" className="btn btn-ghost gap-1.5">
+                  Back to overview
+                  <IconExternal size={13} />
+                </Link>
+              </div>
+            </section>
           </div>
         </div>
       </main>
-      <SiteFooter />
+
+      <PublicFooter />
     </div>
   );
 }

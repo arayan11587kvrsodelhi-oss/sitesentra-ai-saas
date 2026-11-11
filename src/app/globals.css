@@ -1,70 +1,216 @@
 @import "tailwindcss";
 
-/*
- * SiteSentra design tokens.
- * Direction: graphite / dark-neutral surfaces, one restrained cyan accent,
- * high-contrast text, generous spacing. No animation-first decisions.
- */
-@theme {
-  --color-ink-950: #06090c;
-  --color-ink-900: #0a0f14;
-  --color-ink-850: #0e141a;
-  --color-ink-800: #121a21;
-  --color-ink-750: #17212a;
-  --color-ink-700: #1d2932;
-  --color-ink-600: #2a3944;
-  --color-mist-500: #7d8d9a;
-  --color-mist-400: #93a3b0;
-  --color-mist-300: #b6c3cd;
-  --color-mist-200: #d6dee4;
-  --color-mist-100: #eef2f5;
+/* ==========================================================================
+   SiteSentra — design system
+   --------------------------------------------------------------------------
+   Identity: a teal command surface for evidence-based website configuration
+   review.
 
-  --color-signal-300: #7dd3fc;
-  --color-signal-400: #22d3ee;
-  --color-signal-500: #06b6d4;
-  --color-signal-600: #0891b2;
+   · One dark theme, built on a near-black base (#010606) with a deep teal
+     secondary surface (#06433D) that carries the sidebar, the account panel
+     and the marketing bands.
+   · Teal is the brand: #098876 for solid actions, #11C9B6 as the accent used
+     for data, focus and active state. Severity keeps its own scale, and a
+     failure is never tinted with a brand colour.
+   · Quiet depth. Restrained gradients, hairline borders, soft inner rings.
+     No glass, no glow, no oversized decorative cards.
+   · Machine output (URL, id, header, counter, timestamp) is mono; everything
+     written for a human is sans.
+   ========================================================================== */
 
-  --color-ok-400: #34d399;
-  --color-warn-400: #fbbf24;
-  --color-bad-400: #f87171;
-  --color-crit-400: #fb7185;
+:root {
+  /* Surfaces (dark → light) */
+  --bg-base: #010606;
+  --bg-raised: #031211;
+  --bg-panel: #061a19;
+  --bg-inset: #082322;
+  --bg-hover: #0b2b29;
+  --bg-teal: #06433d;
+  --bg-teal-deep: #032622;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+  /* Lines */
+  --line: #0f2725;
+  --line-strong: #1a3a37;
+  --line-teal: rgb(17 201 182 / 0.22);
+
+  /* Text */
+  --fg: #edf0f0;
+  --fg-soft: #c9d2d2;
+  --fg-muted: #9eaaaa;
+  --fg-faint: #6f7c7c;
+  --slate: #575c5e;
+
+  /* Brand */
+  --teal: #098876;
+  --teal-hover: #0aa38c;
+  --teal-deep: #065c50;
+  --mint: #11c9b6;
+  --mint-soft: rgb(17 201 182 / 0.14);
+  --mint-ring: rgb(17 201 182 / 0.32);
+
+  /* Severity / status (kept separate from the brand) */
+  --sev-critical: #f0575c;
+  --sev-high: #f5883d;
+  --sev-medium: #e3b341;
+  --sev-low: #5aa9f5;
+  --pass: #34c79a;
+  --info: #8d9a9c;
+
+  /* Chart series */
+  --chart-1: #11c9b6;
+  --chart-2: #098876;
+  --chart-3: #0e6d84;
+  --chart-4: #2a5c6e;
+
+  /* Radii — generous but not bubbly */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 999px;
+
+  /* Elevation — borders first, shadows second */
+  --ring: 0 0 0 1px var(--line);
+  --pop: 0 22px 48px -18px rgb(0 0 0 / 0.85), 0 0 0 1px var(--line-strong);
+  --focus: 0 0 0 2px var(--bg-base), 0 0 0 4px color-mix(in oklab, var(--mint) 55%, transparent);
+  --inset-soft: inset 0 1px 0 0 rgb(255 255 255 / 0.03);
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms var(--ease);
+  --t: 200ms var(--ease);
+
+  /* Layout */
+  --rail: 264px;
+  --rail-collapsed: 76px;
+  --topbar: 68px;
+  --page-max: 1360px;
+  --gutter: 1rem;
 }
 
-@layer base {
+@media (width >= 40rem) {
   :root {
-    color-scheme: dark;
+    --gutter: 1.5rem;
   }
+}
+@media (width >= 64rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
 
+@theme inline {
+  --color-base: var(--bg-base);
+  --color-raised: var(--bg-raised);
+  --color-panel: var(--bg-panel);
+  --color-inset: var(--bg-inset);
+  --color-hover: var(--bg-hover);
+  --color-teal: var(--bg-teal);
+  --color-teal-deep: var(--bg-teal-deep);
+  --color-teal-mid: var(--teal-deep);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-teal: var(--line-teal);
+
+  --color-fg: var(--fg);
+  --color-soft: var(--fg-soft);
+  --color-muted: var(--fg-muted);
+  --color-faint: var(--fg-faint);
+  --color-slate: var(--slate);
+
+  --color-teal-brand: var(--teal);
+  --color-teal-hover: var(--teal-hover);
+  --color-mint: var(--mint);
+  --color-mint-soft: var(--mint-soft);
+
+  --color-critical: var(--sev-critical);
+  --color-high: var(--sev-high);
+  --color-medium: var(--sev-medium);
+  --color-low: var(--sev-low);
+  --color-pass: var(--pass);
+  --color-info: var(--info);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
   html {
+    background-color: var(--bg-base);
+    color-scheme: dark;
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--color-ink-950);
-    color: var(--color-mist-200);
+    min-height: 100vh;
+    background-color: var(--bg-base);
+    color: var(--fg);
     font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.58;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-  }
-
-  /* Visible focus for keyboard users, everywhere, including on dark surfaces. */
-  :focus-visible {
-    outline: 2px solid var(--color-signal-400);
-    outline-offset: 2px;
-    border-radius: 4px;
+    overflow-wrap: break-word;
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--color-signal-400) 35%, transparent);
-    color: var(--color-mist-100);
+    background: color-mix(in oklab, var(--mint) 34%, transparent);
+    color: var(--fg);
   }
 
-  /* Respect users who ask for less motion. */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus);
+    border-radius: var(--r-xs);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  hr {
+    border-color: var(--line);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
     *,
     *::before,
     *::after {
@@ -76,17 +222,661 @@
   }
 }
 
-@utility surface {
-  background-color: var(--color-ink-900);
-  border: 1px solid var(--color-ink-700);
+/* ==========================================================================
+   Typography helpers
+   ========================================================================== */
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
 }
 
-@utility grid-backdrop {
-  background-image:
-    radial-gradient(
-      900px 400px at 15% -10%,
-      color-mix(in oklab, var(--color-signal-500) 14%, transparent),
-      transparent 70%
-    ),
-    linear-gradient(to bottom, var(--color-ink-900), var(--color-ink-950));
+/* A panel's small caption above its heading — accent-tinted so section labels
+   read as structure rather than as body copy. */
+@utility eyebrow-accent {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mint);
+  opacity: 0.78;
+}
+
+@utility mono {
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+  font-feature-settings: "zero" 1;
+}
+
+@utility display {
+  font-size: clamp(2.5rem, 1.4rem + 3.9vw, 4.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+@utility h1 {
+  font-size: clamp(1.625rem, 1.3rem + 1.1vw, 2.125rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+@utility h2 {
+  font-size: 1.25rem;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+@utility h3 {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+@utility lede {
+  font-size: 1rem;
+  line-height: 1.68;
+  color: var(--fg-muted);
+}
+
+/* Large figure, used in KPI tiles and report headline counts. */
+@utility figure {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+/* ==========================================================================
+   Structure
+   ========================================================================== */
+
+@utility page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Primary container: deep panel, soft border, quiet inset highlight. */
+@utility panel {
+  background-color: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--inset-soft);
+}
+
+/* Secondary container for nested regions and inputs. */
+@utility well {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+
+@utility panel-flat {
+  background-color: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+/* Teal surface — sidebar, account panel, marketing bands. */
+@utility teal-surface {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgb(17 201 182 / 0.10) 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-teal) 0%, var(--bg-teal-deep) 100%);
+  border: 1px solid rgb(17 201 182 / 0.16);
+}
+
+@utility hairline {
+  border-color: var(--line);
+}
+
+@utility section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Small capsule label used above section headings. */
+@utility kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3125rem 0.625rem 0.3125rem 0.5rem;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line-teal);
+  background-color: rgb(6 67 61 / 0.6);
+  color: var(--fg-soft);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+@layer components {
+  /* ---- Buttons ----------------------------------------------------------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border-radius: var(--r-full);
+    border: 1px solid transparent;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color var(--t-fast),
+      border-color var(--t-fast),
+      color var(--t-fast),
+      box-shadow var(--t-fast),
+      transform var(--t-fast);
+  }
+  .btn:focus-visible {
+    box-shadow: var(--focus);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn:not(:disabled):active {
+    transform: translateY(0.5px);
+  }
+
+  .btn-sm {
+    height: 2rem;
+    padding-inline: 0.8125rem;
+    font-size: 0.75rem;
+  }
+  .btn-lg {
+    height: 3rem;
+    padding-inline: 1.375rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-primary {
+    background-color: var(--mint);
+    color: #01211d;
+    border-color: rgb(255 255 255 / 0.12);
+    box-shadow: 0 6px 18px -10px rgb(17 201 182 / 0.65);
+  }
+  .btn-primary:hover {
+    background-color: #22ddc9;
+  }
+  .btn-primary:active {
+    background-color: var(--teal);
+    color: var(--fg);
+  }
+
+  .btn-secondary {
+    background-color: var(--bg-inset);
+    color: var(--fg);
+    border-color: var(--line-strong);
+  }
+  .btn-secondary:hover {
+    background-color: var(--bg-hover);
+    border-color: rgb(17 201 182 / 0.34);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--fg-muted);
+  }
+  .btn-ghost:hover {
+    background-color: var(--bg-hover);
+    color: var(--fg);
+  }
+
+  .btn-danger {
+    background-color: transparent;
+    color: var(--sev-critical);
+    border-color: color-mix(in oklab, var(--sev-critical) 34%, transparent);
+  }
+  .btn-danger:hover {
+    background-color: color-mix(in oklab, var(--sev-critical) 12%, transparent);
+    border-color: var(--sev-critical);
+  }
+
+  /* ---- Form controls ----------------------------------------------------- */
+
+  .field-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    height: 2.75rem;
+    padding-inline: 0.875rem;
+    border-radius: var(--r);
+    border: 1px solid var(--line-strong);
+    background-color: var(--bg-panel);
+    color: var(--fg);
+    font-size: 0.875rem;
+    transition:
+      border-color var(--t-fast),
+      box-shadow var(--t-fast),
+      background-color var(--t-fast);
+  }
+  .field-input::placeholder {
+    color: var(--fg-faint);
+  }
+  .field-input:hover:not(:disabled) {
+    border-color: #24504b;
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--mint);
+    box-shadow: 0 0 0 3px rgb(17 201 182 / 0.16);
+    background-color: var(--bg-inset);
+  }
+  .field-input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .field-input[aria-invalid="true"] {
+    border-color: var(--sev-critical);
+  }
+  .field-input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--sev-critical) 20%, transparent);
+  }
+
+  /* Segmented pill control (filters, tabs). */
+  .segmented {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.1875rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    background-color: var(--bg-panel);
+  }
+  .segmented > a,
+  .segmented > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 1.875rem;
+    padding-inline: 0.75rem;
+    border-radius: var(--r-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      background-color var(--t-fast),
+      color var(--t-fast);
+  }
+  .segmented > a:hover,
+  .segmented > button:hover {
+    color: var(--fg);
+    background-color: var(--bg-inset);
+  }
+  .segmented > [aria-current="page"],
+  .segmented > [data-active="true"] {
+    background-color: var(--bg-hover);
+    color: var(--fg);
+    box-shadow: inset 0 0 0 1px var(--line-teal);
+  }
+
+  /* ---- Disclosure -------------------------------------------------------- */
+
+  .disclosure > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+  .disclosure > summary:focus-visible {
+    outline: none;
+    box-shadow: var(--focus);
+  }
+  .disclosure .chev {
+    transition: transform var(--t);
+  }
+  .disclosure[open] .chev {
+    transform: rotate(180deg);
+  }
+
+  /* ---- Sidebar navigation ------------------------------------------------ */
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 2.5rem;
+    padding-inline: 0.75rem;
+    border-radius: var(--r-full);
+    color: rgb(226 240 238 / 0.72);
+    font-size: 0.8125rem;
+    font-weight: 450;
+    text-decoration: none;
+    position: relative;
+    transition:
+      background-color var(--t-fast),
+      color var(--t-fast);
+  }
+  .nav-item:hover {
+    background-color: rgb(255 255 255 / 0.06);
+    color: var(--fg);
+  }
+  .nav-item[aria-current="page"] {
+    background-color: var(--mint);
+    color: #01211d;
+    font-weight: 500;
+  }
+  .nav-item svg {
+    color: currentColor;
+    opacity: 0.9;
+    flex: none;
+  }
+  .nav-item:hover svg,
+  .nav-item[aria-current="page"] svg {
+    opacity: 1;
+  }
+
+  /* ---- Data table -------------------------------------------------------- */
+
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.8125rem;
+  }
+  .data-table thead th {
+    padding: 0.6875rem 1rem;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+    background: transparent;
+  }
+  .data-table tbody td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .data-table tbody tr {
+    transition: background-color var(--t-fast);
+  }
+  .data-table tbody tr:hover {
+    background-color: rgb(17 201 182 / 0.03);
+  }
+
+  /* ---- Meter ------------------------------------------------------------- */
+
+  .meter {
+    height: 6px;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.32);
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  }
+  .meter > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--teal) 0%, var(--mint) 100%);
+    transition: width var(--t);
+  }
+  .meter[data-low="true"] > span {
+    background: linear-gradient(90deg, #c59a2a 0%, var(--sev-medium) 100%);
+  }
+  .meter[data-empty="true"] > span {
+    background: var(--sev-critical);
+  }
+
+  /* ---- Spinner ----------------------------------------------------------- */
+
+  .spinner {
+    width: 0.9375rem;
+    height: 0.9375rem;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    border-right-color: transparent;
+    animation: ss-spin 700ms linear infinite;
+  }
+  @keyframes ss-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .pulse-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: currentColor;
+    animation: ss-pulse 1.6s var(--ease) infinite;
+  }
+  @keyframes ss-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* ---- Data display ------------------------------------------------------ */
+
+  .evidence-value {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--fg);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .h-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ======================================================================
+     Liquid Glass — authentication surface only.
+     ----------------------------------------------------------------------
+     The dashboard is flat, bordered and matte. Authentication is the one place
+     that gets depth: a frosted pane over green ambient light, with a soft
+     specular edge. Same palette, deliberately different material.
+     ====================================================================== */
+
+  .liquid-stage {
+    background-color: #020b0a;
+  }
+
+  .glass-card {
+    position: relative;
+    border-radius: 28px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background:
+      linear-gradient(157deg, rgb(255 255 255 / 0.09) 0%, rgb(255 255 255 / 0.035) 34%, rgb(6 67 61 / 0.16) 100%);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.14),
+      inset 0 -1px 0 0 rgb(0 0 0 / 0.35),
+      0 34px 70px -34px rgb(0 0 0 / 0.95),
+      0 0 0 1px rgb(17 201 182 / 0.05);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    backdrop-filter: blur(28px) saturate(150%);
+  }
+
+  /* A top-edge highlight, as if light rakes across the glass. */
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(120% 60% at 30% -10%, rgb(17 201 182 / 0.16) 0%, transparent 55%);
+  }
+
+  .glass-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Inputs laid into the glass rather than sitting on top of it. */
+  .glass-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2.875rem;
+    padding-inline: 0.9375rem;
+    border-radius: 14px;
+    border: 1px solid rgb(255 255 255 / 0.12);
+    background-color: rgb(0 0 0 / 0.28);
+    color: var(--fg);
+    font-size: 0.875rem;
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.05);
+    transition:
+      border-color var(--t),
+      box-shadow var(--t),
+      background-color var(--t);
+  }
+  .glass-input::placeholder {
+    color: rgb(255 255 255 / 0.28);
+  }
+  .glass-input:hover:not(:disabled) {
+    border-color: rgb(255 255 255 / 0.2);
+  }
+  .glass-input:focus {
+    outline: none;
+    border-color: rgb(17 201 182 / 0.7);
+    background-color: rgb(0 0 0 / 0.4);
+    box-shadow:
+      0 0 0 3px rgb(17 201 182 / 0.14),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+  }
+  .glass-input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .glass-input[aria-invalid="true"] {
+    border-color: rgb(240 87 92 / 0.75);
+  }
+  .glass-input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px rgb(240 87 92 / 0.16);
+  }
+
+  /* The one button on the page: mint, with a soft green cast beneath it. */
+  .glass-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 2.875rem;
+    margin: 0;
+    border-radius: 14px;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    background: linear-gradient(180deg, #17dcc6 0%, #11c9b6 52%, #0aa891 100%);
+    color: #01211d;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    padding-block: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.45),
+      0 10px 26px -12px rgb(17 201 182 / 0.85);
+    transition:
+      filter var(--t-fast),
+      transform var(--t-fast),
+      box-shadow var(--t-fast);
+  }
+  .glass-cta:hover:not(:disabled) {
+    filter: brightness(1.06);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.5),
+      0 14px 30px -12px rgb(17 201 182 / 0.95);
+  }
+  .glass-cta:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .glass-cta:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .glass-cta:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px #020b0a,
+      0 0 0 4px rgb(17 201 182 / 0.65),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.5);
+  }
+
+  /* ======================================================================
+     Capability grid cells (landing page).
+     ----------------------------------------------------------------------
+     Each cell draws its own rules so the grid is complete at every column
+     count. The "gap over a coloured parent" trick only paints where two cells
+     meet, which leaves ragged half-borders at the row edges.
+     ====================================================================== */
+
+  .cap-cell + .cap-cell {
+    border-top: 1px solid var(--line);
+  }
+
+  @media (width >= 40rem) {
+    .cap-cell {
+      border-top: 1px solid var(--line);
+    }
+    .cap-cell:nth-child(odd) {
+      border-right: 1px solid var(--line);
+    }
+    .cap-cell:nth-child(-n + 2) {
+      border-top: 0;
+    }
+  }
+
+  /* ---- Background texture ------------------------------------------------ */
+
+  /* A faint dot grid, used once per section at most. */
+  .dot-grid {
+    background-image: radial-gradient(rgb(17 201 182 / 0.16) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
 }

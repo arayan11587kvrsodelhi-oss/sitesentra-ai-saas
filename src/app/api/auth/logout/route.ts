@@ -9,6 +9,10 @@ export async function POST(request: Request) {
   if (!(await trustedOrigin(request))) {
     return jsonError(403, "cross-origin", "Cross-origin requests are not accepted.");
   }
-  await destroyCurrentSession();
-  return Response.json({ ok: true });
+  try {
+    await destroyCurrentSession();
+    return Response.json({ ok: true });
+  } catch {
+    return jsonError(503, "logout-failed", "The session could not be revoked. Please try again.");
+  }
 }

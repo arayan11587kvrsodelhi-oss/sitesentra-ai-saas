@@ -1,0 +1,212 @@
+[
+ {
+  "name": "landing-1920",
+  "file": "docs\\redesign\\screenshots\\final2-landing-1920.png",
+  "errors": [],
+  "path": "/",
+  "scrollW": 1920,
+  "clientW": 1920,
+  "h1": "The security configuration your site actually serves — with the eviden",
+  "wide": []
+ },
+ {
+  "name": "landing-1440",
+  "file": "docs\\redesign\\screenshots\\final2-landing-1440.png",
+  "errors": [],
+  "path": "/",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "The security configuration your site actually serves — with the eviden",
+  "wide": []
+ },
+ {
+  "name": "landing-1024",
+  "file": "docs\\redesign\\screenshots\\final2-landing-1024.png",
+  "errors": [],
+  "path": "/",
+  "scrollW": 1024,
+  "clientW": 1024,
+  "h1": "The security configuration your site actually serves — with the eviden",
+  "wide": []
+ },
+ {
+  "name": "landing-768",
+  "file": "docs\\redesign\\screenshots\\final2-landing-768.png",
+  "errors": [],
+  "path": "/",
+  "scrollW": 768,
+  "clientW": 768,
+  "h1": "The security configuration your site actually serves — with the eviden",
+  "wide": []
+ },
+ {
+  "name": "landing-390",
+  "file": "docs\\redesign\\screenshots\\final2-landing-390.png",
+  "errors": [],
+  "path": "/",
+  "scrollW": 390,
+  "clientW": 390,
+  "h1": "The security configuration your site actually serves — with the eviden",
+  "wide": []
+ },
+ {
+  "name": "landing-375",
+  "file": "docs\\redesign\\screenshots\\final2-landing-375.png",
+  "errors": [],
+  "path": "/",
+  "scrollW": 375,
+  "clientW": 375,
+  "h1": "The security configuration your site actually serves — with the eviden",
+  "wide": []
+ },
+ {
+  "name": "dashboard-1440",
+  "file": "docs\\redesign\\screenshots\\final2-dashboard-1440.png",
+  "errors": [],
+  "path": "/dashboard",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "Security overview",
+  "wide": []
+ },
+ {
+  "name": "dashboard-1024",
+  "file": "docs\\redesign\\screenshots\\final2-dashboard-1024.png",
+  "errors": [],
+  "path": "/dashboard",
+  "scrollW": 1024,
+  "clientW": 1024,
+  "h1": "Security overview",
+  "wide": []
+ },
+ {
+  "name": "dashboard-768",
+  "file": "docs\\redesign\\screenshots\\final2-dashboard-768.png",
+  "errors": [],
+  "path": "/dashboard",
+  "scrollW": 768,
+  "clientW": 768,
+  "h1": "Security overview",
+  "wide": []
+ },
+ {
+  "name": "dashboard-390",
+  "file": "docs\\redesign\\screenshots\\final2-dashboard-390.png",
+  "errors": [],
+  "path": "/dashboard",
+  "scrollW": 390,
+  "clientW": 390,
+  "h1": "Security overview",
+  "wide": []
+ },
+ {
+  "name": "dashboard-375",
+  "file": "docs\\redesign\\screenshots\\final2-dashboard-375.png",
+  "errors": [],
+  "path": "/dashboard",
+  "scrollW": 375,
+  "clientW": 375,
+  "h1": "Security overview",
+  "wide": []
+ },
+ {
+  "name": "history-1440",
+  "file": "docs\\redesign\\screenshots\\final2-history-1440.png",
+  "errors": [],
+  "path": "/dashboard/history",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "Scan history",
+  "wide": []
+ },
+ {
+  "name": "history-390",
+  "file": "docs\\redesign\\screenshots\\final2-history-390.png",
+  "errors": [],
+  "path": "/dashboard/history",
+  "scrollW": 390,
+  "clientW": 390,
+  "h1": "Scan history",
+  "wide": []
+ },
+ {
+  "name": "report-1440",
+  "file": "docs\\redesign\\screenshots\\final2-report-1440.png",
+  "errors": [],
+  "path": "/dashboard/scans/91f4c0fc-1acc-4410-bda4-170f5d885a2d",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "akasha.cv",
+  "wide": []
+ },
+ {
+  "name": "report-390",
+  "file": "docs\\redesign\\screenshots\\final2-report-390.png",
+  "errors": [],
+  "path": "/dashboard/scans/91f4c0fc-1acc-4410-bda4-170f5d885a2d",
+  "scrollW": 390,
+  "clientW": 390,
+  "h1": "akasha.cv",
+  "wide": []
+ },
+ {
+  "name": "report-375",
+  "file": "docs\\redesign\\screenshots\\final2-report-375.png",
+  "errors": [],
+  "path": "/dashboard/scans/91f4c0fc-1acc-4410-bda4-170f5d885a2d",
+  "scrollW": 375,
+  "clientW": 375,
+  "h1": "akasha.cv",
+  "wide": []
+ },
+ {
+  "name": "methodology-1440",
+  "file": "docs\\redesign\\screenshots\\final2-methodology-1440.png",
+  "errors": [],
+  "path": "/methodology",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "Exactly what SiteSentra checks — and what it cannot tell you",
+  "wide": []
+ },
+ {
+  "name": "methodology-390",
+  "file": "docs\\redesign\\screenshots\\final2-methodology-390.png",
+  "errors": [],
+  "path": "/methodology",
+  "scrollW": 390,
+  "clientW": 390,
+  "h1": "Exactly what SiteSentra checks — and what it cannot tell you",
+  "wide": []
+ },
+ {
+  "name": "login-1440",
+  "file": "docs\\redesign\\screenshots\\final2-login-1440.png",
+  "errors": [],
+  "path": "/login",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "Sign in",
+  "wide": []
+ },
+ {
+  "name": "login-390",
+  "file": "docs\\redesign\\screenshots\\final2-login-390.png",
+  "errors": [],
+  "path": "/login",
+  "scrollW": 390,
+  "clientW": 390,
+  "h1": "Sign in",
+  "wide": []
+ },
+ {
+  "name": "signup-1440",
+  "file": "docs\\redesign\\screenshots\\final2-signup-1440.png",
+  "errors": [],
+  "path": "/signup",
+  "scrollW": 1440,
+  "clientW": 1440,
+  "h1": "Create your account",
+  "wide": []
+ }
+]

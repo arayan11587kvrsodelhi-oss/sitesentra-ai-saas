@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AuthForm } from "@/components/auth-form";
-import { BrandMark } from "@/components/site-header";
+import { AuthShell } from "@/components/auth-shell";
 import { getCurrentUser } from "@/lib/auth/session";
 import { safeRedirectPath } from "@/lib/auth/password";
 
@@ -21,32 +20,32 @@ export default async function LoginPage({ searchParams }: Props) {
   if (user) redirect(next);
 
   return (
-    <main id="main" className="grid-backdrop flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="mb-6 flex items-center gap-2.5 text-mist-100">
-          <span className="text-signal-400">
-            <BrandMark className="h-7 w-7" />
-          </span>
-          <Link href="/" className="text-base font-semibold tracking-tight">
-            Site<span className="text-signal-400">Sentra</span>
-          </Link>
-        </div>
-
-        <div className="rounded-xl border border-ink-700 bg-ink-900 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.45)] sm:p-8">
-          <h1 className="text-2xl font-semibold tracking-tight text-mist-100">Sign in</h1>
-          <p className="mt-2 text-sm text-mist-400">
-            Access your scan history and run new website security configuration checks.
-          </p>
-          <div className="mt-6">
-            <AuthForm mode="login" next={next} />
-          </div>
-        </div>
-
-        <p className="mt-6 text-center text-xs leading-relaxed text-mist-500">
-          Passwords are hashed with scrypt and never stored in plaintext. Sessions use HttpOnly, SameSite cookies and
-          only a hash of the session token is kept in the database.
-        </p>
-      </div>
-    </main>
+    <AuthShell
+      eyebrow="Welcome back"
+      title="Sign in"
+      description="Access your scan history and run new website security configuration checks."
+      side={{
+        eyebrow: "How sessions work",
+        heading: "Your reports stay private to your account.",
+        points: [
+          {
+            icon: "lock",
+            text: "Sessions use an HttpOnly, SameSite cookie. Only a hash of the session token is stored in the database.",
+          },
+          {
+            icon: "shield",
+            text: "Passwords are hashed with scrypt and never stored in plaintext.",
+          },
+          {
+            icon: "terminal",
+            text: "Scan reports record the URL you submitted, observed response metadata and findings. Set-Cookie values are never stored.",
+          },
+        ],
+      }}
+      altAction={{ href: "/signup", label: "No account yet?", cta: "Create one" }}
+      footer="Signed in only on this device. Sign out from the workspace panel when you are finished."
+    >
+      <AuthForm mode="login" next={next} />
+    </AuthShell>
   );
 }

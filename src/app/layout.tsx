@@ -3,10 +3,6 @@ import type { ReactNode } from "react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-/*
- * Self-hosted at build time by next/font, which keeps the app's CSP
- * (`font-src 'self' data:`) valid — no third-party font requests at runtime.
- */
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -33,9 +29,16 @@ export const metadata: Metadata = {
     "SiteSentra checks the observable HTTPS and HTTP security-header configuration of a public website and reports evidence-backed findings with remediation advice. It is not a penetration test.",
   applicationName: "SiteSentra",
   robots: { index: true, follow: true },
+  verification: {
+    google: "FZv-FHKEPm17OtxcD-0PF9tp1OUDQvBtogXsfSDJtLk",
+  },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
       <body>

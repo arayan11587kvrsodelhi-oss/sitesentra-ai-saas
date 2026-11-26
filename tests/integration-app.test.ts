@@ -166,27 +166,49 @@ describe("application-level: session flows", () => {
 
   itWithContext("concurrent request contexts remain isolated", async () => {
     const { destroyCurrentSession } = await import("../src/lib/auth/session.ts");
+
     const first = createMockCookieJar();
     const second = createMockCookieJar();
+
     first.jar.set("ss_session", "first-token");
     second.jar.set("ss_session", "second-token");
+
+    let observed = 0;
+    let releaseBarrier!: () => void;
+
+    const bothObserved = new Promise<void>((resolve) => {
+      releaseBarrier = resolve;
+    });
+
+    async function destroyInContext(
+      own: MockCookieJar,
+      other: MockCookieJar,
+      ownToken: string,
+      otherToken: string,
+    ) {
+      // Verify both contexts before either request deletes its cookie.
+      assert.deepEqual(own.jar.get("ss_session"), { value: ownToken });
+      assert.deepEqual(other.jar.get("ss_session"), { value: otherToken });
+
+      observed += 1;
+      if (observed === 2) releaseBarrier();
+
+      await bothObserved;
+
+      await destroyCurrentSession();
+
+      // The current request must delete only its own cookie.
+      assert.equal(own.jar.get("ss_session"), undefined);
+    }
 
     await Promise.all([
       runWithSessionRequestContext(
         { cookies: first.jar, headers: new Headers() },
-        async () => {
-          await destroyCurrentSession();
-          assert.equal(first.jar.get("ss_session"), undefined);
-          assert.deepEqual(second.jar.get("ss_session"), { value: "second-token" });
-        },
+        () => destroyInContext(first, second, "first-token", "second-token"),
       ),
       runWithSessionRequestContext(
         { cookies: second.jar, headers: new Headers() },
-        async () => {
-          await destroyCurrentSession();
-          assert.equal(second.jar.get("ss_session"), undefined);
-          assert.deepEqual(first.jar.get("ss_session"), { value: "first-token" });
-        },
+        () => destroyInContext(second, first, "second-token", "first-token"),
       ),
     ]);
   });

@@ -58,16 +58,11 @@ function ttlSeconds(): number {
 }
 
 /**
- * The cookie is marked Secure when the request reached us over HTTPS.
- * On Vercel (and any TLS-terminating proxy) `x-forwarded-proto` is `https`.
- * Deriving it per request avoids locking out local http:// development while
- * still being strict in production.
+ * Only production deployments set the Secure cookie attribute.
+ * Local HTTP development remains usable.
  */
-async function requestIsSecure(): Promise<boolean> {
-  const headerList = (await currentRequestContext()).headers;
-  const forwarded = headerList.get("x-forwarded-proto");
-  if (forwarded) return forwarded.split(",")[0].trim().toLowerCase() === "https";
-  return process.env.NODE_ENV === "production" && process.env.VERCEL === "1";
+function cookieIsSecure(): boolean {
+  return process.env.NODE_ENV === "production";
 }
 
 export async function createSession(userId: string): Promise<void> {
@@ -86,7 +81,7 @@ export async function createSession(userId: string): Promise<void> {
   jar.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: await requestIsSecure(),
+    secure: cookieIsSecure(),
     path: "/",
     maxAge: ttl,
   });

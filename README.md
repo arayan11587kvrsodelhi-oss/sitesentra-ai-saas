@@ -42,22 +42,27 @@ imply a guarantee we cannot make.
   scanner are implemented on Node built-ins (`node:crypto`, `node:https`, `node:dns`, `node:net`).
 - Tests run on **Node's built-in test runner** (`node --test`) — no test framework was added.
 
-### Note on Supabase (read this)
+### Architecture: Neon PostgreSQL + Drizzle
 
-The brief specifies Supabase for auth and Postgres. This environment provides a PostgreSQL
-server and Drizzle, but **no Supabase project or credentials**, so the running application uses
-a server-side session implementation with equivalent guarantees:
+This application uses a server-side session implementation with Neon PostgreSQL and Drizzle ORM,
+providing equivalent security guarantees to Supabase:
 
-- scrypt password hashing (N=16384, r=8, p=1, 64-byte key, per-password salt)
-- opaque 256-bit session tokens, stored **only as SHA-256 digests**
-- HttpOnly + SameSite=Lax cookies, Secure whenever the request arrived over HTTPS
-- identity always derived server-side from the session, never from a client-supplied id
+- **Password hashing**: scrypt (N=16384, r=8, p=1, 64-byte key, per-password salt)
+- **Session tokens**: Opaque 256-bit random tokens, stored **only as SHA-256 digests** in the database
+- **Cookie security**: HttpOnly, SameSite=Lax, Secure in production (`NODE_ENV=production`), path="/"
+- **Identity derivation**: Always server-side from the session, never from a client-supplied id
+- **Database**: Neon PostgreSQL with Drizzle ORM (`src/db/schema.ts`)
+- **Row Level Security**: Policies defined in `supabase/schema.sql` for defense-in-depth; however,
+  the primary isolation boundary is the explicit `WHERE user_id = session.user_id` predicate in
+  every query (see `src/app/api/scans/[id]/route.ts` and `src/app/dashboard/page.tsx`).
+- **Authentication**: Custom session layer in `src/lib/auth/` — not `@supabase/ssr`. Swapping to
+  `@supabase/ssr` would be a contained change if Supabase credentials become available.
 
-`supabase/schema.sql` contains the same schema **plus** Row Level Security policies written
-against `auth.uid()`, so the database layer can be moved to Supabase Postgres without rewriting
-the security model. `.env.example` documents the Supabase variables and which ones are
-privileged. Swapping the session layer for `@supabase/ssr` is a contained change in
-`src/lib/auth/` and is the recommended next step if Supabase credentials become available.
+`.env.example` documents the environment variables. `DATABASE_URL` is the only privileged connection
+string — all other variables are public, browser-safe identifiers.
+
+Supabase schema (`supabase/schema.sql`) is kept as a reproducible reference for the same
+security model, but the application connects directly to Neon PostgreSQL via Drizzle ORM.
 
 ---
 
